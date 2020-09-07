@@ -31,7 +31,7 @@ static void readWorld(const std::string filenanme) {
     grids.clear();
     std::ifstream ifs(filenanme);
     if (!ifs) {
-        exit (EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     }
     std::string line;
     while (std::getline(ifs, line)) {
@@ -161,8 +161,7 @@ static GLdouble* interpolate(GLdouble* angles1, GLdouble* angles2,
         double offset) {
     GLdouble* angles_interp = new GLdouble[numDOFs];
     for (auto i = 0; i < numDOFs; ++i) {
-        angles_interp[i] = angles1[i]
-                + (angles2[i] - angles1[i]) * offset;
+        angles_interp[i] = angles1[i] + (angles2[i] - angles1[i]) * offset;
     }
     return angles_interp;
 }
@@ -186,17 +185,17 @@ static void plan(GLdouble* start, GLdouble* goal, int plannerId) {
     switch (plannerId) {
     case 0:
         rrtPlanner =
-                new RRTPlanner<GLdouble*>(numNodes, tolerance,
-                        goalSamplingRate, isValidConfiguration,
-                        euclideanDistance, sample, interpolate,
+                new RRTPlanner<GLdouble*>(numNodes, tolerance, goalSamplingRate,
+                        isValidConfiguration, euclideanDistance, sample,
+                        interpolate,
                         [](GLdouble* angles) {if (angles != nullptr)delete[] angles; angles = nullptr;});
         path = rrtPlanner->buildPath(start, goal, extension_distance,
                 resolution);
         break;
     case 1:
         rrtPlanner =
-                new RRTConnectPlanner<GLdouble*>(numNodes,
-                        tolerance, goalSamplingRate, isValidConfiguration,
+                new RRTConnectPlanner<GLdouble*>(numNodes, tolerance,
+                        goalSamplingRate, isValidConfiguration,
                         euclideanDistance, sample, interpolate,
                         [](GLdouble* angles) {if (angles != nullptr)delete[] angles; angles = nullptr;});
         path = rrtPlanner->buildPath(start, goal, extension_distance,
@@ -204,8 +203,8 @@ static void plan(GLdouble* start, GLdouble* goal, int plannerId) {
         break;
     case 2:
         rrtPlanner =
-                new RRTStarPlanner<GLdouble*>(numNodes,
-                        tolerance, goalSamplingRate, isValidConfiguration,
+                new RRTStarPlanner<GLdouble*>(numNodes, tolerance,
+                        goalSamplingRate, isValidConfiguration,
                         euclideanDistance, sample, interpolate,
                         [](GLdouble* angles) {if (angles != nullptr)delete[] angles; angles = nullptr;});
         path = rrtPlanner->buildPath(start, goal, extension_distance,
@@ -236,8 +235,8 @@ void setup(void) {
     rrtPlanner = nullptr;
     prmPlanner = nullptr;
 
-    glEnable (GL_DEPTH_TEST);
-    glDepthFunc (GL_LEQUAL);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
     srand(time(nullptr));
 
@@ -258,13 +257,13 @@ void setup(void) {
  */
 void display(void) {
     glClearColor(0, 0, 0, 0);
-    glClear (GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT);
 
-    glMatrixMode (GL_PROJECTION);
+    glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(30, 1.0, 1.0, 1000);
 
-    glMatrixMode (GL_MODELVIEW);
+    glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     gluLookAt(eye.x, eye.y, eye.z, eye.x, eye.y, 0.0, 0.0, 1.0, 0.0);
 
@@ -311,10 +310,10 @@ void display(void) {
  */
 void reshape(int width, int height) {
     glViewport(0, 0, (GLsizei) width, (GLsizei) height);
-    glMatrixMode (GL_PROJECTION);
+    glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(60.0, (GLdouble) width / (GLdouble) height, 4, 10.0);
-    glMatrixMode (GL_MODELVIEW);
+    glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     gluLookAt(eye.x, eye.y, eye.z, eye.x, eye.y, 0.0, 0.0, 1.0, 0.0);
 }
@@ -364,7 +363,7 @@ void keyPressed(int key, int x, int y) {
     switch (key) {
     case GLUT_KEY_END:
         glutLeaveMainLoop();
-        exit (EXIT_SUCCESS);
+        exit(EXIT_SUCCESS);
     case GLUT_KEY_LEFT:
         --eye.x;
         break;
@@ -385,8 +384,8 @@ void keyPressed(int key, int x, int y) {
 int main(int argc, char** argv) {
     LABEL: setup();
 
-    std::vector < GLdouble > start(numDOFs, DBL_MAX);
-    std::vector < GLdouble > goal(numDOFs, DBL_MAX);
+    std::vector<GLdouble> start(numDOFs, DBL_MAX);
+    std::vector<GLdouble> goal(numDOFs, DBL_MAX);
     std::cout << "Enter start configuration: ";
     for (int index = 0; index < numDOFs; ++index) {
         std::cin >> start[index];

@@ -27,11 +27,7 @@
 #include <numeric>
 
 enum ExtensionStatus {
-    INITED, 
-    ADVANCED, 
-    TRAPPED, 
-    REACHED,
-    CONNECTED,
+    INITED, ADVANCED, TRAPPED, REACHED, CONNECTED,
 };
 
 /**
@@ -90,7 +86,8 @@ protected:
 template<typename C>
 RRTPlanner<C>::RRTPlanner(size_t numNodes, double tolerance,
         double goalSamplingRate, std::function<bool(C)> isValid,
-        std::function<double(C, C)> computeDistance, std::function<C(void)> sample,
+        std::function<double(C, C)> computeDistance,
+        std::function<C(void)> sample,
         std::function<C(C, C, double)> interpolate,
         std::function<void(C)> destroyConfig) :
         numNodes(numNodes) {
@@ -285,7 +282,7 @@ template<typename C>
 std::deque<C> RRTConnectPlanner<C>::buildPath(C start, C goal,
         double extensionDistance, double resolution) {
     this->reset();
-    std::deque < C > path;
+    std::deque<C> path;
     if (!this->isValid(start)) {
         std::cout << "Invalid start configuration." << std::endl;
         return path;
@@ -421,7 +418,7 @@ void RRTStarPlanner<C>::setRadius(double radius) {
 template<typename C>
 void RRTStarPlanner<C>::rewire(void) {
 
-    std::vector < size_t > indices;
+    std::vector<size_t> indices;
     std::vector<double> distances;
 
     C configNew = this->configs.back();
@@ -467,7 +464,7 @@ std::deque<C> RRTStarPlanner<C>::buildPath(C start, C goal,
         double extensionDistance, double resolution) {
 
     this->reset();
-    std::deque < C > path;
+    std::deque<C> path;
 
     if (!this->isValid(start)) {
         std::cout << "Invalid start configuration." << std::endl;
@@ -547,8 +544,7 @@ public:
             std::function<C(C, C, double)> interpolate,
             std::function<void(C)> destroyConfig);
     ~PRMPlanner(void);
-    void buildRoadmap(size_t numNodes, double radius,
-            double resolution);
+    void buildRoadmap(size_t numNodes, double radius, double resolution);
     virtual std::deque<C> buildPath(C start, C goal, double radius,
             double resolution);
 
@@ -575,7 +571,8 @@ protected:
 
 template<typename C>
 PRMPlanner<C>::PRMPlanner(std::function<bool(C)> isValid,
-        std::function<double(C, C)> computeDistance, std::function<C(void)> sample,
+        std::function<double(C, C)> computeDistance,
+        std::function<C(void)> sample,
         std::function<C(C, C, double)> interpolate,
         std::function<void(C)> destroyConfig) {
 
@@ -670,7 +667,7 @@ bool PRMPlanner<C>::search(void) {
             [&fscores](size_t index1, size_t index2) {return fscores[index1] > fscores[index2];};
     std::priority_queue<size_t, std::vector<size_t>, decltype(compare)> open(
             compare);
-    std::unordered_set < size_t > closed;
+    std::unordered_set<size_t> closed;
 
     open.push(numVertices - 2);
 
