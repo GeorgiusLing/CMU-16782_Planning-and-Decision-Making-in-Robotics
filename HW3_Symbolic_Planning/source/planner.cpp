@@ -15,7 +15,7 @@ const bool using_heuristics = true;
 std::vector<std::vector<std::string>> generatePermutations(
         std::vector<std::string> &symbols, size_t permutation_length) {
 
-    std::vector < std::vector < std::string >> permutations;
+    std::vector<std::vector<std::string>> permutations;
     if (symbols.size() < permutation_length) {
         return permutations;
     }
@@ -39,7 +39,7 @@ std::vector<std::vector<std::string>> generatePermutations(
         }
 
     };
-    std::vector < std::string > permutation;
+    std::vector<std::string> permutation;
     depthFirstSearch(permutation, 0);
     return permutations;
 }
@@ -47,16 +47,16 @@ std::vector<std::vector<std::string>> generatePermutations(
 std::vector<Action> generateActions(const std::unordered_set<Action> &actions,
         const std::unordered_set<std::string> &pool) {
 
-    std::unordered_map<size_t, std::vector < std::vector<std::string>> > memo;
-    std::vector < Action > grounded_actions;
-    std::vector < std::string > symbols;
+    std::unordered_map<size_t, std::vector <std::vector<std::string>>> memo;
+    std::vector<Action> grounded_actions;
+    std::vector<std::string> symbols;
     for (const std::string &symbol : pool) {
         symbols.push_back(symbol);
     }
     std::sort(symbols.begin(), symbols.end());
 
     for (const Action &action : actions) {
-        std::vector < std::string > args;
+        std::vector<std::string> args;
         for (const std::string &arg : action.getArgs()) {
             if (!pool.count(arg)) {
                 args.push_back(arg);
@@ -67,7 +67,7 @@ std::vector<Action> generateActions(const std::unordered_set<Action> &actions,
         }
 
         auto permutations = memo[args.size()];
-        std::unordered_map < std::string, std::string > value;
+        std::unordered_map<std::string, std::string> value;
         for (const std::vector<std::string> &permutation : permutations) {
             value.clear();
             for (auto index = 0; index < args.size(); ++index) {
@@ -83,16 +83,16 @@ std::list<Action> planner(World* world) {
     // this is where you insert your planner
     auto begin = std::chrono::high_resolution_clock::now();
     float epsilon = 1.2;
-    std::vector < Action > actions = generateActions(world->getActions(),
+    std::vector<Action> actions = generateActions(world->getActions(),
             world->getSymbols());
 
     const State goal(world->getGoalConditions());
     const State start(world->getInitialConditions());
 
     std::unordered_map<State, float> hscore;
-    std::unordered_map < State, size_t > gscore;
-    std::unordered_map < State, State > predecessor; // Current state to previous state
-    std::unordered_map < State, Action > edgeIn; // Map to the action resulting in current state
+    std::unordered_map<State, size_t> gscore;
+    std::unordered_map<State, State> predecessor; // Current state to previous state
+    std::unordered_map<State, Action> edgeIn; // Map to the action resulting in current state
 
     gscore[start] = 0;
     hscore[goal] = 0;
@@ -122,9 +122,9 @@ std::list<Action> planner(World* world) {
 
     std::priority_queue<State, std::vector<State>, decltype(compare)> open(
             compare);
-    std::unordered_set < State > closed;
+    std::unordered_set<State> closed;
     open.push(start);
-    std::list < Action > plan;
+    std::list<Action> plan;
     State temp;
 
     while (!open.empty() && computeHeuristic(open.top(), true) > 0) {
@@ -155,8 +155,7 @@ std::list<Action> planner(World* world) {
             plan.push_front(edgeIn[state]);
         }
     }
-    auto elapsed = std::chrono::duration_cast < std::chrono::seconds
-            > (std::chrono::high_resolution_clock::now() - begin).count();
+    auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::high_resolution_clock::now() - begin).count();
     std::cout << "Time taken: " << elapsed << " s" << std::endl;
     std::cout << "Number of steps: " << plan.size() << std::endl;
     std::cout << "Number of states expanded: " << gscore.size() << std::endl;
@@ -175,7 +174,7 @@ int main(int argc, char* argv[]) {
         std::cout << *env;
     }
 
-    std::list < Action > actions = planner(env);
+    std::list<Action> actions = planner(env);
 
     std::cout << "\nPlan: " << std::endl;
     for (Action gac : actions) {

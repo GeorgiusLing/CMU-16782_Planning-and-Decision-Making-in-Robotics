@@ -102,7 +102,7 @@ Action::Action(const Action &action,
         }
 
     }
-    std::list < std::string > argValues;
+    std::list<std::string> argValues;
     for (auto &precondition : action.getPreconditions()) {
         argValues.clear();
         for (const std::string &arg : precondition.getArgs()) {
@@ -251,7 +251,7 @@ std::unordered_set<Condition> World::getGoalConditions(void) {
 }
 
 static std::list<std::string> parseSymbols(std::string symbols_str) {
-    std::list < std::string > symbols;
+    std::list<std::string> symbols;
     size_t pos = 0;
     std::string delimiter = ",";
     while ((pos = symbols_str.find(delimiter)) != std::string::npos) {
@@ -278,8 +278,8 @@ World* createWorld(char* filename) {
     std::regex effectRegex("effects:(.*)", std::regex::icase);
     int parser = SYMBOLS;
 
-    std::unordered_set < Condition > preconditions;
-    std::unordered_set < Condition > effects;
+    std::unordered_set<Condition> preconditions;
+    std::unordered_set<Condition> effects;
     std::string actionName;
     std::string actionArgs;
 
@@ -548,8 +548,7 @@ bool State::apply(const Action &action, State &after) {
             precondition.setTruth(false);
         }
     }
-    after.conditions = std::unordered_set < Condition
-            > (this->conditions.begin(), this->conditions.end());
+    after.conditions = std::unordered_set<Condition>(this->conditions.begin(), this->conditions.end());
     auto effects = action.getEffects();
     for (auto effect : effects) {
         if (effect.getTruth()) {
@@ -571,7 +570,7 @@ std::string State::toString(void) const {
     if (this->conditions.empty()) {
         return temp;
     }
-    std::vector < std::string > components;
+    std::vector<std::string> components;
     for (auto &condition : this->conditions) {
         components.push_back(condition.toString());
     }
